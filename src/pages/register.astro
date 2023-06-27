@@ -1,0 +1,110 @@
+---
+import Header from "../components/Header.astro";
+import Layout from "../layouts/Layout.astro";
+---
+
+<Layout>
+    <Header />
+
+    <main>
+        <form id="registerForm">
+            <div class="mb-4">
+                <label
+                    for="username"
+                    class="block text-gray-700 text-sm font-bold mb-2"
+                    >Username:</label
+                >
+                <input
+                    type="text"
+                    id="username"
+                    name="username"
+                    placeholder="What username would you like?"
+                    class="border border-gray-300 rounded-md px-4 py-2 w-full focus:outline-none focus:ring-blue-500 focus:border-blue-500"
+                    required
+                />
+            </div>
+            <div class="mb-4">
+                <label
+                    for="message"
+                    class="block text-gray-700 text-sm font-bold mb-2"
+                    >Message:</label
+                >
+                <input
+                    type="text"
+                    id="message"
+                    name="message"
+                    placeholder="How will I know it's really you?"
+                    class="border border-gray-300 rounded-md px-4 py-2 w-full focus:outline-none focus:ring-blue-500 focus:border-blue-500"
+                    required
+                />
+            </div>
+            <div class="text-center">
+                <button
+                    type="submit"
+                    class="bg-purple-500 text-white py-2 px-4 rounded-md hover:bg-purple-600"
+                    >Register</button
+                >
+            </div>
+        </form>
+    </main>
+</Layout>
+
+<style>
+    main {
+        margin: auto;
+        padding: 1.5rem;
+        max-width: 60ch;
+    }
+</style>
+
+<script type="module">
+import { client } from "/webauthn.min.js";
+document
+    .querySelector("#registerForm")
+    .addEventListener("submit", async function (event) {
+        event.preventDefault();
+        let response = await fetch("/api/nonce", {
+            method: "POST",
+            headers: {
+                "Content-Type": "application/json",
+            },
+            body: "{}",
+        });
+        if (!response.ok) {
+            alert("Please refresh the page. Error generating challenge.");
+        }
+        let data = await response.json();
+        const challenge = data.nonce;
+        const username = event.target.username.value.trim();
+        const message = event.target.message.value;
+        const registration = await client.register(username, challenge, {
+                authenticatorType: "auto",
+                userVerification: "required",
+                timeout: 60000,
+                attestation: false,
+                debug: false,
+            });
+            data = {
+                username: username,
+                challenge: challenge,
+                message: message,
+                registration: registration,
+            };
+            response = await fetch("/api/register", {
+                method: "POST",
+                headers: {
+                    "Content-Type": "application/json",
+                },
+                body: JSON.stringify(data),
+            });
+            if (response.ok) {
+                alert(
+                    "Registration successful. I'll let you know when you can login."
+                );
+            } else {
+                alert(
+                    "There was an error registering your key. Please refresh this page and try again."
+                );
+            }
+        });
+</script>

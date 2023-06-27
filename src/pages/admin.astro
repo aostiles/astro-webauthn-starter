@@ -1,0 +1,31 @@
+---
+import Header from "../components/Header.astro";
+import Message from "../components/Message.astro";
+import { getMessages } from "../db";
+import Layout from "../layouts/Layout.astro";
+const data = Astro.locals;
+const messages = await getMessages(Astro.request);
+---
+
+<Layout>
+    <Header />
+
+    <main>
+        <div>
+            <p>Messages</p>
+            {
+                messages.map((message) => (
+                    <Message email={message.email} body={message.message} />
+                ))
+            }
+        </div>
+    </main>
+</Layout>
+
+<style>
+    main {
+        margin: auto;
+        padding: 1.5rem;
+        max-width: 60ch;
+    }
+</style>

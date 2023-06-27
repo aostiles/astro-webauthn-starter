@@ -1,0 +1,56 @@
+---
+const data = Astro.locals;
+const site_owner = import.meta.env.PUBLIC_SITE_OWNER;
+const site_name = import.meta.env.PUBLIC_SITE_NAME;
+const site_tagline = import.meta.env.PUBLIC_SITE_TAGLINE_TITLECASE;
+---
+
+<header class="bg-gray-900 text-white py-4">
+    <nav
+        class="container mx-auto px-4 sm:px-8 flex flex-col sm:flex-row items-center justify-between"
+    >
+        <div class="text-center sm:text-left">
+            <a href="/" class="text-2xl font-bold hover:text-white"
+                >{site_name}</a
+            >
+            <p class="text-gray-300 text-sm">{site_tagline}</p>
+        </div>
+        <ul class="flex space-x-4 mt-4 sm:mt-0">
+            <li>
+                <a href="#" class="text-gray-300 hover:text-white"
+                    >Newsletter</a>
+            </li>
+            <li>
+                <a href="#" class="text-gray-300 hover:text-white">GitHub</a>
+            </li>
+            <li>
+                <a href="#" class="text-gray-300 hover:text-white">Twitter</a>
+            </li>
+            <li>
+                <a href="/friends" class="text-gray-300 hover:text-white"
+                    >Friends</a>
+            </li>
+            {
+                data.username === site_owner ? (
+                    <li>
+                        <a href="/admin" class="text-gray-300 hover:text-white">
+                            Admin
+                        </a>
+                    </li>
+                ) : null
+            }
+            {
+                data.username ? (
+                    <li>
+                        <a
+                            href="/logout"
+                            class="text-gray-300 hover:text-white"
+                        >
+                            Logout
+                        </a>
+                    </li>
+                ) : null
+            }
+        </ul>
+    </nav>
+</header>

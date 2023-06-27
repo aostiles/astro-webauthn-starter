@@ -1,0 +1,46 @@
+---
+import Header from "../components/Header.astro";
+import Layout from "../layouts/Layout.astro";
+---
+
+<Layout>
+    <Header />
+
+    <main>
+        <div class="text-center">
+            <button
+                class="bg-purple-500 text-white py-2 px-4 rounded-md hover:bg-purple-600"
+                id="logoutButton">Log Out</button
+            >
+        </div>
+    </main>
+</Layout>
+
+<style>
+    main {
+        margin: auto;
+        padding: 1.5rem;
+        max-width: 60ch;
+    }
+</style>
+
+<script type="module">
+document
+    .querySelector("#logoutButton")
+    .addEventListener("click", async function (event) {
+        event.preventDefault();
+        let response = await fetch("/api/logout", {
+            method: "POST",
+            headers: {
+                "Content-Type": "application/json",
+            },
+            body: "{}",
+        });
+        if (!response.ok) {
+            alert("There was a problem logging out.");
+        } else {
+                alert("You are now logged out.");
+                window.location.href = "/";
+            }
+        });
+</script>

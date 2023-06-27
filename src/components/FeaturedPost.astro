@@ -1,0 +1,17 @@
+---
+export interface Props {
+	title: string;
+	url: string;
+    dateStr: string;
+}
+
+const { title, url, dateStr } = Astro.props;
+const date = new Date(dateStr);
+const month = date.toLocaleString('default', { month: 'long' });
+const year = date.getFullYear().toString();
+---
+
+<div class="note mb-2 p-4 bg-gray-200 border-2 border-gray-300 rounded-md flex items-center">
+	<a href={url} class="font-bold text-black no-underline hover:underline">{title}</a>
+    <span class="ml-2 text-gray-700 text-sm">{month} {year}</span>
+</div>

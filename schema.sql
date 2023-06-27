@@ -1,0 +1,61 @@
+DROP TABLE IF EXISTS messages;
+CREATE TABLE IF NOT EXISTS messages (
+    message_id INTEGER PRIMARY KEY AUTOINCREMENT,
+    email TEXT,
+    message TEXT,
+    time_created TIMESTAMP DEFAULT CURRENT_TIMESTAMP
+);
+
+DROP TABLE IF EXISTS nonces;
+CREATE TABLE IF NOT EXISTS nonces (
+    nonce TEXT PRIMARY KEY,
+    expiration_timestamp INTEGER
+);
+
+DROP TABLE IF EXISTS reg_requests;
+CREATE TABLE IF NOT EXISTS reg_requests (
+    id INTEGER PRIMARY KEY AUTOINCREMENT,
+    username TEXT,
+    message TEXT,
+    cred TEXT,
+    created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
+);
+
+DROP TABLE IF EXISTS creds;
+CREATE TABLE IF NOT EXISTS creds (
+    id INTEGER PRIMARY KEY AUTOINCREMENT,
+    user_id INTEGER,
+    cred TEXT,
+    FOREIGN KEY(user_id) REFERENCES users(id)
+);
+
+DROP TABLE IF EXISTS users;
+CREATE TABLE IF NOT EXISTS users (
+    id INTEGER PRIMARY KEY AUTOINCREMENT,
+    username TEXT UNIQUE
+);
+
+DROP TABLE IF EXISTS sessions;
+CREATE TABLE sessions (
+    id INTEGER PRIMARY KEY AUTOINCREMENT,
+    session_id TEXT,
+    user_id INTEGER,
+    created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+    expires_at TIMESTAMP,
+    FOREIGN KEY(user_id) REFERENCES users(id)
+);
+
+DROP TABLE IF EXISTS notes;
+CREATE TABLE notes (
+    id INTEGER PRIMARY KEY AUTOINCREMENT,
+    content TEXT,
+    created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
+);
+
+DROP TABLE IF EXISTS featured_posts;
+CREATE TABLE featured_posts (
+    id INTEGER PRIMARY KEY AUTOINCREMENT,
+    title TEXT,
+    url TEXT,
+    created_at DATE
+);

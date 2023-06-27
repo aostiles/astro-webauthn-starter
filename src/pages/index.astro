@@ -1,0 +1,66 @@
+---
+import FeaturedPost from "../components/FeaturedPost.astro";
+import Header from "../components/Header.astro";
+import { getFeaturedPosts } from "../db";
+import Layout from "../layouts/Layout.astro";
+const ts_site_key = import.meta.env.PUBLIC_TURNSTILE_SITE_KEY;
+const posts = await getFeaturedPosts(Astro.request);
+---
+
+<Layout>
+  <Header />
+
+  <main>
+    {
+      posts.map((post) => (
+        <FeaturedPost title={post.title} url={post.url} dateStr={post.created_at} />
+      ))
+    }
+    <form action="/api/contact" method="POST" class="">
+      <div class="mb-4">
+        <label for="email" class="block text-gray-700 text-sm font-bold mb-2"
+          >Email:</label
+        >
+        <input
+          type="email"
+          id="email"
+          name="email"
+          placeholder="Enter your email"
+          class="border border-gray-300 rounded-md px-4 py-2 w-full focus:outline-none focus:ring-blue-500 focus:border-blue-500"
+          required
+        />
+      </div>
+      <div class="mb-4">
+        <label for="message" class="block text-gray-700 text-sm font-bold mb-2"
+          >Message:</label
+        >
+        <textarea
+          id="message"
+          name="message"
+          rows="4"
+          placeholder="Enter your message"
+          class="border border-gray-300 rounded-md px-4 py-2 w-full focus:outline-none focus:ring-blue-500 focus:border-blue-500"
+          required></textarea>
+      </div>
+      <div class="cf-turnstile" data-sitekey={ts_site_key}></div>
+      <div class="text-center">
+        <button
+          type="submit"
+          class="bg-purple-500 text-white py-2 px-4 rounded-md hover:bg-purple-600"
+          >Contact Me</button
+        >
+      </div>
+    </form>
+  </main>
+</Layout>
+
+<style>
+  main {
+    margin: auto;
+    padding: 1.5rem;
+    max-width: 60ch;
+  }
+</style>
+
+<script src="https://challenges.cloudflare.com/turnstile/v0/api.js" async defer
+></script>

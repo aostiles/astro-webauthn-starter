@@ -1,0 +1,39 @@
+---
+import Header from '../components/Header.astro';
+import Note from '../components/Note.astro';
+import { getNotes } from '../db';
+import Layout from '../layouts/Layout.astro';
+const data = Astro.locals;
+const notes = await getNotes(Astro.request);
+---
+
+<Layout>
+
+  <Header/>
+
+	<main>
+        {data.username ? (
+            <div>
+                <p>Welcome, friend.</p>
+                {notes.map((note) => (
+                    <Note body={note} />
+                ))}
+            </div>
+          ) : (
+            <p>This is a section of the site just for my friends.</p>
+            <p>Please <a href="/login" class="underline font-bold decoration-indigo-500">log in</a> to see it.</p>
+            <p>If you haven't yet registered, you'll need to do that first.</p>
+            <p>I manually approve registrations.</p>
+            <p>Text me and let me know the username / message you used. I'll let you in.</p>
+            <p>You can register <a href="/register" class="underline font-bold decoration-indigo-500">here</a>.</p>
+        )}
+	</main>
+</Layout>
+
+<style>
+	main {
+		margin: auto;
+		padding: 1.5rem;
+		max-width: 60ch;
+	}
+</style>

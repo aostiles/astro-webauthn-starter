@@ -1,0 +1,23 @@
+---
+export interface Props {
+	body: string;
+}
+
+const { body } = Astro.props;
+---
+
+<div class="note mt-8">
+	{body}
+</div>
+<style>
+	.note {
+		list-style: none;
+		display: flex;
+		padding: 0.25rem;
+		background-color: white;
+		background-size: 400%;
+		border-radius: 0.6rem;
+		box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1),
+			0 2px 4px -2px rgba(0, 0, 0, 0.1);
+	}
+</style>
